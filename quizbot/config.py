@@ -11,7 +11,17 @@ def _parse_ids(raw: str) -> frozenset[int]:
 
 BOT_TOKEN = os.getenv("BOT_TOKEN", "")
 ADMIN_IDS = _parse_ids(os.getenv("ADMIN_IDS", ""))
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///quiz.db")
+
+# Railway containers have a writable /tmp directory but may retain an old
+# DATABASE_URL such as sqlite+aiosqlite:///quiz.db in their variables.
+# Normalize relative SQLite URLs so the app can start without PostgreSQL.
+_database_url = os.getenv("DATABASE_URL", "").strip()
+if not _database_url:
+    DATABASE_URL = "sqlite+aiosqlite:////tmp/quiz.db"
+elif _database_url.startswith("sqlite+aiosqlite:///") and not _database_url.startswith("sqlite+aiosqlite:////"):
+    DATABASE_URL = "sqlite+aiosqlite:////tmp/quiz.db"
+else:
+    DATABASE_URL = _database_url
 
 # النقاط الافتراضية للسؤال (إن لم يحدد الملف points أو difficulty)
 POINTS_PER_QUESTION = int(os.getenv("POINTS_PER_QUESTION", "10"))
