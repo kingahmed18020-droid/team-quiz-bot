@@ -15,6 +15,4 @@ COPY samples ./samples
 RUN useradd -m bot && mkdir /data && chown -R bot:bot /app /data
 USER bot
 
-VOLUME ["/data"]
-
 CMD ["python", "-m", "quizbot"]
