@@ -1,0 +1,39 @@
+[
+  {
+    "subject": "الفيزياء",
+    "question": "ما هي وحدة قياس القوة في النظام الدولي؟",
+    "options": ["النيوتن", "الجول", "الوات", "الباسكال"],
+    "correct_option": 0,
+    "difficulty": "easy",
+    "explanation": "النيوتن = كجم × م/ث²، سُمّيت تكريماً لإسحاق نيوتن.",
+    "time_limit": 30
+  },
+  {
+    "subject": "الكيمياء",
+    "question": "ما هو الرمز الكيميائي للماء؟",
+    "options": ["CO2", "H2O", "NaCl", "كل ما سبق"],
+    "correct_option": 1,
+    "points": 15,
+    "shuffle": false,
+    "time_limit": 20
+  },
+  {
+    "subject": "الفيزياء",
+    "type": "numeric",
+    "question": "كم تبلغ عجلة الجاذبية الأرضية تقريباً بوحدة م/ث²؟",
+    "correct_value": 9.8,
+    "tolerance": 0.3,
+    "difficulty": "صعب",
+    "points": 20,
+    "explanation": "g ≈ 9.8 م/ث² عند سطح الأرض.",
+    "time_limit": 30
+  },
+  {
+    "subject": "الجغرافيا",
+    "question": "ما اسم هذا المعلم؟",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/e/e3/Kheops-Pyramid.jpg",
+    "options": ["هرم خوفو", "برج إيفل", "تمثال الحرية"],
+    "correct_option": 0,
+    "time_limit": 25
+  }
+]

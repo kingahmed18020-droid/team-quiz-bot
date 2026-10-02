@@ -1,0 +1,51 @@
+# التشغيل:  docker compose up -d --build
+# السجلات:  docker compose logs -f bot
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: quizbot
+      POSTGRES_USER: quizbot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?ضع POSTGRES_PASSWORD في ملف .env}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U quizbot -d quizbot"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  bot:
+    build: .
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      # يتجاوز DATABASE_URL الموجود في .env
+      DATABASE_URL: postgresql+asyncpg://quizbot:${POSTGRES_PASSWORD}@db:5432/quizbot
+    depends_on:
+      db:
+        condition: service_healthy
+    stop_grace_period: 20s
+
+  # نسخ احتياطي يومي تلقائي (يحتفظ بـ 7 أيام + 4 أسابيع) داخل ./backups
+  backup:
+    image: prodrigestivill/postgres-backup-local:16
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_DB: quizbot
+      POSTGRES_USER: quizbot
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      SCHEDULE: "@daily"
+      BACKUP_KEEP_DAYS: 7
+      BACKUP_KEEP_WEEKS: 4
+      BACKUP_KEEP_MONTHS: 0
+    volumes:
+      - ./backups:/backups
+
+volumes:
+  pgdata:

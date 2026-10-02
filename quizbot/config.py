@@ -1,0 +1,32 @@
+import os
+
+from dotenv import load_dotenv
+
+load_dotenv()
+
+
+def _parse_ids(raw: str) -> frozenset[int]:
+    return frozenset(int(x) for x in raw.replace(" ", "").split(",") if x)
+
+
+BOT_TOKEN = os.getenv("BOT_TOKEN", "")
+ADMIN_IDS = _parse_ids(os.getenv("ADMIN_IDS", ""))
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite+aiosqlite:///quiz.db")
+
+# النقاط الافتراضية للسؤال (إن لم يحدد الملف points أو difficulty)
+POINTS_PER_QUESTION = int(os.getenv("POINTS_PER_QUESTION", "10"))
+# نقاط مستويات الصعوبة
+DIFFICULTY_POINTS = {"easy": 5, "medium": 10, "hard": 15}
+# أقصى بونص للسرعة كنسبة من نقاط السؤال (0.5 = +50%)
+SPEED_BONUS_MAX = float(os.getenv("SPEED_BONUS_MAX", "0.5"))
+
+BREAK_SECONDS = int(os.getenv("BREAK_SECONDS", "5"))
+# العدّاد التنازلي الحي: كل كم ثانية يُحدَّث؟ (0 = معطّل)
+COUNTDOWN_INTERVAL = int(os.getenv("COUNTDOWN_INTERVAL", "10"))
+# يتعطّل تلقائياً لو عدد الطلاب أكبر من هذا (حماية من حدود تليجرام)
+COUNTDOWN_MAX_USERS = int(os.getenv("COUNTDOWN_MAX_USERS", "150"))
+
+DEFAULT_TIME_LIMIT = 30
+MIN_TIME_LIMIT = 5
+MAX_TIME_LIMIT = 600
+MAX_UPLOAD_BYTES = 2 * 1024 * 1024
