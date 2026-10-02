@@ -10,8 +10,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY quizbot ./quizbot
 COPY samples ./samples
 
-# مستخدم غير جذري + مجلد بيانات (لاستخدام SQLite داخل حاوية)
-RUN useradd -m bot && mkdir /data && chown bot /data
+# مستخدم غير جذري + مجلدات قابلة للكتابة (لدعم SQLite داخل الحاوية)
+# chown لـ /app مهم إذا كانت منصة النشر تعيد تعريف DATABASE_URL إلى quiz.db نسبي.
+RUN useradd -m bot && mkdir /data && chown -R bot:bot /app /data
 USER bot
 
 VOLUME ["/data"]

@@ -27,6 +27,7 @@ docker compose logs -f bot
 - التحديث: `git pull && docker compose up -d --build` (الأعمدة الجديدة تُضاف للقاعدة تلقائياً عند التشغيل).
 - بدون Docker وبقاعدة SQLite: انسخ احتياطياً بـ `sqlite3 quiz.db ".backup 'backup-$(date +%F).db'"` (يومياً عبر cron).
 - عند تشغيل صورة Docker وحدها بدون `docker compose` تستخدم SQLite داخل `/data/quiz.db`، لذلك اربط مجلداً دائماً مع `/data`، مثال: `docker run -v "$PWD/data:/data" ...`.
+- بعد تحديث الصورة استخدم `docker compose up -d --build` أو أعد نشر Docker image؛ إذا كانت منصة النشر تحتوي متغير `DATABASE_URL` قديماً مثل `sqlite+aiosqlite:///quiz.db` فاحذفه أو غيّره إلى `sqlite+aiosqlite:////data/quiz.db`.
 
 ## طريقة الاستخدام
 **المشرف**
