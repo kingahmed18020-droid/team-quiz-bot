@@ -26,8 +26,15 @@ docker compose logs -f bot
   ```
 - التحديث: `git pull && docker compose up -d --build` (الأعمدة الجديدة تُضاف للقاعدة تلقائياً عند التشغيل).
 - بدون Docker وبقاعدة SQLite: انسخ احتياطياً بـ `sqlite3 quiz.db ".backup 'backup-$(date +%F).db'"` (يومياً عبر cron).
-- عند تشغيل صورة Docker وحدها بدون `docker compose` تستخدم SQLite داخل `/data/quiz.db`، لذلك اربط مجلداً دائماً مع `/data`، مثال: `docker run -v "$PWD/data:/data" ...`.
-- بعد تحديث الصورة استخدم `docker compose up -d --build` أو أعد نشر Docker image؛ إذا كانت منصة النشر تحتوي متغير `DATABASE_URL` قديماً مثل `sqlite+aiosqlite:///quiz.db` فاحذفه أو غيّره إلى `sqlite+aiosqlite:////data/quiz.db`.
+- عند تشغيل صورة Docker وحدها بدون `docker compose` تستخدم SQLite داخل `/tmp/quiz.db`.
+- بعد تحديث الصورة استخدم `docker compose up -d --build` أو أعد نشر Docker image؛ إذا كانت منصة النشر تحتوي متغير `DATABASE_URL` قديماً مثل `sqlite+aiosqlite:///quiz.db` فاحذفه أو غيّره إلى `sqlite+aiosqlite:////tmp/quiz.db`.
+
+## النشر على Railway بدون PostgreSQL
+- لا تحتاج لإضافة PostgreSQL أو أي خدمة قاعدة بيانات على Railway.
+- ارفع المشروع من GitHub واترك Railway يستخدم `Dockerfile`.
+- أضف فقط متغيري البيئة `BOT_TOKEN` و`ADMIN_IDS`.
+- لا تضف `DATABASE_URL`؛ الصورة ستستخدم SQLite داخل `/tmp/quiz.db` تلقائياً.
+- تنبيه: نظام ملفات Railway مؤقت، لذلك ستُمسح الفرق والأسئلة والنقاط عند إعادة النشر أو إعادة تشغيل الخدمة. استخدم PostgreSQL أو Volume إذا أردت الاحتفاظ بالبيانات.
 
 ## طريقة الاستخدام
 **المشرف**

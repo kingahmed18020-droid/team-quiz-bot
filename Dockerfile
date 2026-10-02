@@ -1,7 +1,7 @@
 FROM python:3.12-slim
 
 ENV PYTHONUNBUFFERED=1 PYTHONDONTWRITEBYTECODE=1 \
-    DATABASE_URL=sqlite+aiosqlite:////data/quiz.db
+    DATABASE_URL=sqlite+aiosqlite:////tmp/quiz.db
 WORKDIR /app
 
 COPY requirements.txt .
